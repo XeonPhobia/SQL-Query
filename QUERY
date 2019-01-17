@@ -9,8 +9,10 @@ USE _temp_e1;
 GO
 SELECT distinct [EXAM_MODALITY] + ', ' FROM [temp_e1] for xml path('')
 
--- Use result from last SELECT, remove the ending comma and replace all the two letter abberivations underneath in next query.
-SELECT DATO, BI, CR, CT, DX, EC, ES, MG, MR, NM, OT, PR, PT, RF, SC, US, XA
+-- Use result from last SELECT, remove the ending comma and replace @MODALITY in next query.
+DECLARE @MODALITY AS VARCHAR(MAX)
+SELECT @MODALITY = 'BI, CR, CT, DX, EC, ES, MG, MR, NM, OT, PR, PT, RF, SC, US, XA'
+SELECT DATO, @MODALITY
   FROM 
 	(SELECT DATO, NUMBER_EXAM, EXAM_MODALITY FROM temp_e1 
 	) AS SourceTable
@@ -18,6 +20,6 @@ PIVOT
 (
 avg(NUMBER_EXAM)
 FOR 
-EXAM_MODALITY IN (BI, CR, CT, DX, EC, ES, MG, MR, NM, OT, PR, PT, RF, SC, US, XA)
+EXAM_MODALITY IN (@MODALITY)
 ) AS PivotTable
 ORDER BY left(DATO, 4), len(DATO), DATO;

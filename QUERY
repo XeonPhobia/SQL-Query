@@ -9,6 +9,7 @@ USE _temp_e1;
 GO
 SELECT distinct [EXAM_MODALITY] + ', ' FROM [temp_e1] for xml path('')
 
+-- Use result from last SELECT, remove the ending comma and replace all the two letter abberivations underneath in next query.
 SELECT DATO, BI, CR, CT, DX, EC, ES, MG, MR, NM, OT, PR, PT, RF, SC, US, XA
   FROM 
 	(SELECT DATO, NUMBER_EXAM, EXAM_MODALITY FROM temp_e1 
